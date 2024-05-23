@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -22,15 +22,30 @@ function App() {
 
   }
 
-  function Ingresar() {
-    if (usuario == 'admin' && clave == 'admin') {
+   async function Ingresar() {
+    const peticion = await fetch('http://localhost:3001/login?usuario='+usuario+'&clave='+clave,{credentials:'include'})
+    if (peticion.ok){
+      setLogueado(true)
+    } else{
+      alert('Usuario o clave incorrectos')
+    }
+
+   /* if (usuario == 'admin' && clave == 'admin') {
       alert('Ingresaste')
       setLogueado (true)
     } else {
       alert('Usuario o clave incorrectos')
-    }
+    } */
   }
-
+ async  function validar() {
+    const peticion = await fetch('http://localhost:3001/validar',{credentials:'include'})
+    if (peticion.ok){
+      setLogueado(true)
+    }   
+  }
+  useEffect(()=>{
+  validar()   
+  }, [])
   
    if (logueado){
     return <Conversor/>
